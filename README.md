@@ -11,5 +11,5 @@ The module will attach the `PurgeInboxObserver` to the `OnAfterConfigure` event 
 ## Configuration
 
 ```c#
-services.AddPurgeInboxModule();
+services.AddPurgeInbox();
 ```
