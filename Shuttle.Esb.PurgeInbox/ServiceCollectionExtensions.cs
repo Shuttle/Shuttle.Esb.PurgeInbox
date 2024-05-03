@@ -14,7 +14,7 @@ namespace Shuttle.Esb.PurgeInbox
             services.TryAddSingleton<PurgeInboxHostedService, PurgeInboxHostedService>();
             services.TryAddSingleton<PurgeInboxObserver, PurgeInboxObserver>();
 
-            services.AddPipelineModule<PurgeInboxHostedService>();
+            services.AddHostedService<PurgeInboxHostedService>();
 
             return services;
         }
