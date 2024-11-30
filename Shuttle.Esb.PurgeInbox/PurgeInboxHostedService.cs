@@ -40,6 +40,6 @@ public class PurgeInboxHostedService : IHostedService
             return;
         }
 
-        e.Pipeline.RegisterObserver(_purgeInboxObserver);
+        e.Pipeline.AddObserver(_purgeInboxObserver);
     }
 }
