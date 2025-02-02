@@ -2,29 +2,19 @@
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
 
-namespace Shuttle.Esb.PurgeInbox
+namespace Shuttle.Esb.PurgeInbox;
+
+public class PurgeInboxObserver : IPipelineObserver<OnAfterCreatePhysicalQueues>
 {
-    public class PurgeInboxObserver : IPipelineObserver<OnAfterCreatePhysicalQueues>
+    private readonly IServiceBusConfiguration _configuration;
+
+    public PurgeInboxObserver(IServiceBusConfiguration configuration)
     {
-        private readonly IServiceBusConfiguration _configuration;
+        _configuration = Guard.AgainstNull(configuration);
+    }
 
-        public PurgeInboxObserver(IServiceBusConfiguration configuration)
-        {
-            Guard.AgainstNull(configuration, nameof(configuration));
-
-            _configuration = configuration;
-        }
-
-        public void Execute(OnAfterCreatePhysicalQueues pipelineEvent)
-        {
-            (_configuration.Inbox.WorkQueue as IPurgeQueue)?.Purge(); ;
-        }
-
-        public async Task ExecuteAsync(OnAfterCreatePhysicalQueues pipelineEvent)
-        {
-            Execute(pipelineEvent);
-
-            await Task.CompletedTask;
-        }
+    public async Task ExecuteAsync(IPipelineContext<OnAfterCreatePhysicalQueues> pipelineContext)
+    {
+        await ((_configuration.Inbox?.WorkQueue as IPurgeQueue)?.PurgeAsync() ?? Task.CompletedTask);
     }
 }

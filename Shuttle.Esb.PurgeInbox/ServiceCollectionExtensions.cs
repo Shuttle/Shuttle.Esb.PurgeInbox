@@ -1,22 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Shuttle.Core.Contract;
-using Shuttle.Core.Pipelines;
 
-namespace Shuttle.Esb.PurgeInbox
+namespace Shuttle.Esb.PurgeInbox;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddPurgeInbox(this IServiceCollection services)
     {
-        public static IServiceCollection AddPurgeInbox(this IServiceCollection services)
-        {
-            Guard.AgainstNull(services, nameof(services));
+        Guard.AgainstNull(services);
 
-            services.TryAddSingleton<PurgeInboxHostedService, PurgeInboxHostedService>();
-            services.TryAddSingleton<PurgeInboxObserver, PurgeInboxObserver>();
+        services.TryAddSingleton<PurgeInboxHostedService, PurgeInboxHostedService>();
+        services.TryAddSingleton<PurgeInboxObserver, PurgeInboxObserver>();
 
-            services.AddHostedService<PurgeInboxHostedService>();
+        services.AddHostedService<PurgeInboxHostedService>();
 
-            return services;
-        }
+        return services;
     }
 }
